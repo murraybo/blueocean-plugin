@@ -1,6 +1,7 @@
 package io.jenkins.blueocean.commons;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -27,6 +28,9 @@ public class IterableUtils
     }
 
     public static <T> Iterable<T> getIterable(Stream<T> stream){
+        if(stream==null) {
+            return Collections.emptyList();
+        }
         return stream::iterator;
     }
 }

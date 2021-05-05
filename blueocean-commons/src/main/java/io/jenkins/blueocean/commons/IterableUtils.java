@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class IterableUtils
@@ -23,5 +24,9 @@ public class IterableUtils
                               Predicate<? super T> predicate, @Nullable T defaultValue) {
         Optional<? super T> opt = (Optional<T>) StreamSupport.stream(iterable.spliterator(), false).filter(predicate).findFirst();
         return opt.isPresent()?(T) opt.get() :defaultValue;
+    }
+
+    public static <T> Iterable<T> getIterable(Stream<T> stream){
+        return stream::iterator;
     }
 }

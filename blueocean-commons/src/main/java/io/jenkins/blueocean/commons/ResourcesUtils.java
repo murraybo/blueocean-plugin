@@ -1,14 +1,12 @@
 package io.jenkins.blueocean.commons;
 
 
-import java.io.BufferedReader;
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
 
 public class ResourcesUtils {
     public ResourcesUtils() {
@@ -35,12 +33,7 @@ public class ResourcesUtils {
     public static String toString(URL resource, Charset charset)
         throws IOException
     {
-        try (InputStream inputStream = resource.openStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader( inputStream, charset))){
-            return bufferedReader
-                .lines()
-                .collect( Collectors.joining( "\n"));
-        }
+        return IOUtils.toString(resource, charset);
     }
 
 }

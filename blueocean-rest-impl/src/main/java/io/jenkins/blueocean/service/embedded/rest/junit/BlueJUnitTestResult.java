@@ -1,10 +1,10 @@
 package io.jenkins.blueocean.service.embedded.rest.junit;
 
-import com.google.common.collect.Iterables;
 import hudson.Extension;
 import hudson.model.Run;
 import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.TestResultAction;
+import io.jenkins.blueocean.commons.IterableUtils;
 import io.jenkins.blueocean.commons.ServiceException.NotFoundException;
 import io.jenkins.blueocean.rest.Reachable;
 import io.jenkins.blueocean.rest.factory.BlueTestResultFactory;
@@ -142,8 +142,10 @@ public class BlueJUnitTestResult extends BlueTestResult {
             testsToTransform.addAll(action.getFailedTests());
             testsToTransform.addAll(action.getSkippedTests());
             testsToTransform.addAll(action.getPassedTests());
-            return Result.of(Iterables.transform(testsToTransform, //
-                                                 input ->  new BlueJUnitTestResult(input, parent.getLink())));
+
+            return Result.of(IterableUtils.getIterable(testsToTransform
+                                 .stream()
+                                 .map(caseResult -> new BlueJUnitTestResult(caseResult, parent.getLink()))));
         }
     }
 

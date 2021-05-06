@@ -24,7 +24,7 @@ public class IterableUtils
     public static <T> T find( Iterable<? extends T> iterable,
                               Predicate<? super T> predicate, @Nullable T defaultValue) {
         Optional<? super T> opt = (Optional<T>) StreamSupport.stream(iterable.spliterator(), false).filter(predicate).findFirst();
-        return opt.isPresent()?(T) opt.get() :defaultValue;
+        return (T)opt.orElse(defaultValue);
     }
 
     public static <T> Iterable<T> getIterable(Stream<T> stream){

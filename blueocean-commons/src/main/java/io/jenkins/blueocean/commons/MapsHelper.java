@@ -17,9 +17,7 @@ public class MapsHelper {
     }
 
     public static <K,V> Map<K,V> of(K k1, V v1) {
-        Map<K,V> map = new HashMap<>();
-        map.put(k1, v1);
-        return Collections.unmodifiableMap(map);
+        return Collections.singletonMap(k1,v1);
     }
 
     public static <K,V> Map<K,V> of(K k1, V v1, K k2, V v2) {

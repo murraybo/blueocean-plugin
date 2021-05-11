@@ -54,8 +54,6 @@ public class Utils {
         return path.charAt(path.length()-1) == '/' ? path : path+"/";
     }
 
-    // We can't use guava Iterators.skip() as it's removed ver 13.0 onwards and core
-    // enforces ver 11.0.1. So we use our own
     public static <T> int skip(Iterator<T> base, int offset){
         Objects.requireNonNull(base);
         if(offset < 0) throw new IllegalArgumentException("offest must be >= )");

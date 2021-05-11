@@ -2,7 +2,6 @@ package io.jenkins.blueocean.service.embedded.rest;
 
 import hudson.Functions;
 import hudson.model.Run;
-import io.jenkins.blueocean.commons.IterableUtils;
 import io.jenkins.blueocean.rest.Reachable;
 import io.jenkins.blueocean.rest.factory.BlueArtifactFactory;
 import io.jenkins.blueocean.rest.hal.Link;
@@ -10,10 +9,8 @@ import io.jenkins.blueocean.rest.model.BlueArtifact;
 import io.jenkins.blueocean.rest.model.BlueArtifactContainer;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
 public class ArtifactContainerImpl extends BlueArtifactContainer {

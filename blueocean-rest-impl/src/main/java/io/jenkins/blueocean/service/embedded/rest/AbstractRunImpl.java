@@ -383,7 +383,7 @@ public abstract class AbstractRunImpl<T extends Run> extends BlueRun {
         }
 
         static Collection<BlueCause> getCauses(Collection<hudson.model.Cause> causes) {
-            return causes.stream().map(BlueCauseImpl::new).collect( Collectors.toList());
+            return causes.stream().map(BlueCauseImpl::new).collect(Collectors.toList());
         }
     }
 }

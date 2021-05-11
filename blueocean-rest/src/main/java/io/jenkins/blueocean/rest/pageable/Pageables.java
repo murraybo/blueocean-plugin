@@ -39,13 +39,9 @@ public abstract class Pageables {
      * @return iterator with starting index==start and size &lt; limit
      */
     public static <T> Iterator<T> slice(Iterator<T> base, int start, int limit) {
-        // fast-forward
-        int skipped = skip(base,start);
-        if (skipped < start){ //already at the end, nothing to return
-            return Collections.emptyIterator();
-        }
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize( base, Spliterator.SORTED), false)
-            .skip(limit)
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(base, Spliterator.SORTED), false)
+            .skip(start)
+            .limit(limit)
             .iterator();
     }
 

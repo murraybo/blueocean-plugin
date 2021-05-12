@@ -2,8 +2,8 @@ package io.jenkins.blueocean.rest.impl.pipeline;
 
 import hudson.model.Result;
 import hudson.model.Run;
-import io.jenkins.blueocean.commons.ResourcesUtils;
 import jenkins.plugins.git.GitSampleRepoRule;
+import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.cps.replay.ReplayAction;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
@@ -11,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.Issue;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -29,7 +30,7 @@ public class PipelineRunImplTest extends PipelineBaseTest {
     @Test
     @Issue("JENKINS-53019")
     public void testMultipleRepoChangeSet() throws Exception {
-        String jenkinsFile = ResourcesUtils.toString(getClass().getResource("mulitpleScms.jenkinsfile"))
+        String jenkinsFile = IOUtils.toString(getClass().getResource( "mulitpleScms.jenkinsfile"), StandardCharsets.UTF_8)
             .replaceAll( "%REPO1%", sampleRepo1.toString())
             .replaceAll( "%REPO2%", sampleRepo2.toString());
 
@@ -72,7 +73,7 @@ public class PipelineRunImplTest extends PipelineBaseTest {
     @Test
     @Issue("JENKINS-53019")
     public void changelogFromReplayDeleted() throws Exception {
-        String jenkinsFile = ResourcesUtils.toString(getClass().getResource("mulitpleScms.jenkinsfile"))
+        String jenkinsFile = IOUtils.toString(getClass().getResource("mulitpleScms.jenkinsfile"), StandardCharsets.UTF_8)
             .replaceAll("%REPO1%", sampleRepo1.toString())
             .replaceAll("%REPO2%", sampleRepo2.toString());
 

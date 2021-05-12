@@ -2,12 +2,14 @@ package io.jenkins.blueocean.rest.impl.pipeline;
 
 import hudson.model.Result;
 import hudson.model.Run;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import io.jenkins.blueocean.commons.ResourcesUtils;
 import jenkins.plugins.git.GitSampleRepoRule;
+import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.junit.Rule;
@@ -24,7 +26,7 @@ public class PipelineImplTest extends PipelineBaseTest {
     @Test
     @Issue("JENKINS-55497")
     public void testPipelineRunSummaryHasChangeSet() throws Exception {
-        String jenkinsFile = ResourcesUtils.toString(getClass().getResource("singleScm.jenkinsfile"))
+        String jenkinsFile = IOUtils.toString(getClass().getResource( "singleScm.jenkinsfile"), StandardCharsets.UTF_8)
             .replaceAll( "%REPO%", sampleRepo.toString());
 
         WorkflowJob p = j.createProject(WorkflowJob.class, "project");

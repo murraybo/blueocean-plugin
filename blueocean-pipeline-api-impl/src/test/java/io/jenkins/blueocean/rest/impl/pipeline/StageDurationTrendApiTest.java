@@ -1,13 +1,14 @@
 package io.jenkins.blueocean.rest.impl.pipeline;
 
 import hudson.model.Run;
-import io.jenkins.blueocean.commons.ResourcesUtils;
+import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class StageDurationTrendApiTest extends PipelineBaseTest {
     @Test
     public void getDurationTrend() throws Exception {
         URL resource = getClass().getResource("declarativeThreeStages.jenkinsfile");
-        String jenkinsFile = ResourcesUtils.toString(resource);
+        String jenkinsFile = IOUtils.toString(resource, StandardCharsets.UTF_8);
 
         WorkflowJob p = j.createProject(WorkflowJob.class, "duration-trend");
         p.setDefinition(new CpsFlowDefinition(jenkinsFile, true));

@@ -14,11 +14,11 @@ import hudson.model.User;
 import hudson.security.csrf.CrumbIssuer;
 import hudson.tasks.Mailer;
 import io.jenkins.blueocean.commons.JsonConverter;
-import io.jenkins.blueocean.commons.ResourcesUtils;
 import jenkins.model.Jenkins;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.acegisecurity.userdetails.UserDetails;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.actions.ThreadNameAction;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -365,8 +366,8 @@ public abstract class PipelineBaseTest{
     protected List<FlowNode> getStages(NodeGraphBuilder builder){
         return builder.getPipelineNodes().stream()
             .filter( nodeWrapper -> nodeWrapper.type == FlowNodeWrapper.NodeType.STAGE )
-            .map( nodeWrapper -> nodeWrapper.getNode() )
-            .collect( Collectors.toList() );
+            .map(FlowNodeWrapper::getNode)
+            .collect(Collectors.toList());
     }
 
     protected List<FlowNode> getAllSteps(WorkflowRun run){
@@ -381,16 +382,16 @@ public abstract class PipelineBaseTest{
     protected List<FlowNode> getStagesAndParallels(NodeGraphBuilder builder){
         return builder.getPipelineNodes().stream()
             .filter( nodeWrapper -> nodeWrapper.type == FlowNodeWrapper.NodeType.PARALLEL || nodeWrapper.type == FlowNodeWrapper.NodeType.STAGE)
-            .map( nodeWrapper -> nodeWrapper.getNode() )
-            .collect( Collectors.toList() );
+            .map(FlowNodeWrapper::getNode)
+            .collect(Collectors.toList());
 
     }
 
     protected List<FlowNode> getParallelNodes(NodeGraphBuilder builder){
         return builder.getPipelineNodes().stream()
-            .filter( nodeWrapper -> nodeWrapper.type == FlowNodeWrapper.NodeType.PARALLEL )
-            .map( nodeWrapper -> nodeWrapper.getNode() )
-            .collect( Collectors.toList() );
+            .filter(nodeWrapper -> nodeWrapper.type == FlowNodeWrapper.NodeType.PARALLEL)
+            .map(FlowNodeWrapper::getNode)
+            .collect(Collectors.toList());
     }
 
     protected String getHrefFromLinks(Map resp, String link){
@@ -635,7 +636,7 @@ public abstract class PipelineBaseTest{
         }
 
 
-        UserDetails d = Jenkins.getInstance().getSecurityRealm().loadUserByUsername(bob.getId());
+        UserDetails d = Jenkins.get().getSecurityRealm().loadUserByUsername(bob.getId());
 
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(bob.getId(), bob.getId(), d.getAuthorities()));
         return bob;
@@ -645,9 +646,9 @@ public abstract class PipelineBaseTest{
     }
 
     protected WorkflowJob createWorkflowJobWithJenkinsfile(Class<?> contextClass, String jenkinsFileName) throws java.io.IOException {
-        WorkflowJob p = j.createProject(WorkflowJob.class, "project-" + UUID.randomUUID().toString());
+        WorkflowJob p = j.createProject(WorkflowJob.class, "project-" + UUID.randomUUID());
         URL resource = contextClass.getResource(jenkinsFileName);
-        String jenkinsFile = ResourcesUtils.toString(resource);
+        String jenkinsFile = IOUtils.toString(resource, StandardCharsets.UTF_8);
         p.setDefinition(new CpsFlowDefinition(jenkinsFile, true));
         p.save();
         return p;

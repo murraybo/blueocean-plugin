@@ -1,10 +1,10 @@
 package io.jenkins.blueocean.rest.impl.pipeline;
 
 import hudson.model.Result;
-import io.jenkins.blueocean.commons.ResourcesUtils;
 import io.jenkins.blueocean.listeners.NodeDownstreamBuildAction;
 import io.jenkins.blueocean.rest.hal.Link;
 import io.jenkins.blueocean.rest.model.BlueRun;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.jvnet.hudson.test.Issue;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -545,7 +546,7 @@ public class GraphBuilderTest extends PipelineBaseTest {
         WorkflowJob job = j.createProject(WorkflowJob.class, jobName);
 
         URL resource = getClass().getResource(jenkinsFileName);
-        String jenkinsFile = ResourcesUtils.toString(resource);
+        String jenkinsFile = IOUtils.toString(resource, StandardCharsets.UTF_8);
         job.setDefinition(new CpsFlowDefinition(jenkinsFile, true));
         return job;
     }

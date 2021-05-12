@@ -4,7 +4,6 @@ import hudson.matrix.MatrixProject;
 import hudson.model.CauseAction;
 import hudson.model.Result;
 import io.jenkins.blueocean.analytics.Analytics;
-import io.jenkins.blueocean.commons.ResourcesUtils;
 import io.jenkins.blueocean.rest.impl.pipeline.PipelineBaseTest;
 import io.jenkins.blueocean.service.embedded.analytics.AbstractAnalytics;
 import io.jenkins.blueocean.service.embedded.analytics.JobAnalytics;
@@ -13,6 +12,7 @@ import jenkins.branch.BranchSource;
 import jenkins.branch.DefaultBranchPropertyStrategy;
 import jenkins.plugins.git.GitSCMSource;
 import jenkins.plugins.git.GitSampleRepoRule;
+import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 import org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject;
@@ -22,6 +22,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.TestExtension;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,13 +41,15 @@ public class JobAnalyticsTest extends PipelineBaseTest {
     public void setup() throws Exception {
         sampleRepo.init();
         sampleRepo.git("checkout","master");
-        sampleRepo.write( "Jenkinsfile", ResourcesUtils.toString(JobAnalyticsTest.class.getResource("JobAnalyticsTest-scripted.jenkinsfile")));
+        sampleRepo.write( "Jenkinsfile", IOUtils.toString(JobAnalyticsTest.class.getResource( "JobAnalyticsTest-scripted.jenkinsfile"),
+                                                          StandardCharsets.UTF_8));
         sampleRepo.git("add", "Jenkinsfile");
         sampleRepo.git("commit", "--all", "--message=Jenkinsfile");
 
         sampleRepo2.init();
         sampleRepo2.git("checkout","master");
-        sampleRepo2.write("Jenkinsfile", ResourcesUtils.toString(JobAnalyticsTest.class.getResource("JobAnalyticsTest-declarative.jenkinsfile")));
+        sampleRepo2.write("Jenkinsfile", IOUtils.toString(JobAnalyticsTest.class.getResource("JobAnalyticsTest-declarative.jenkinsfile"),
+                                                          StandardCharsets.UTF_8));
         sampleRepo2.git("add", "Jenkinsfile");
         sampleRepo2.git("commit", "--all", "--message=Jenkinsfile");
     }

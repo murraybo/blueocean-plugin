@@ -1,18 +1,19 @@
 package io.jenkins.blueocean.htmlpublisher;
 
 import hudson.model.Run;
-import io.jenkins.blueocean.commons.ResourcesUtils;
 import io.jenkins.blueocean.rest.factory.BluePipelineFactory;
 import io.jenkins.blueocean.rest.impl.pipeline.PipelineBaseTest;
 import io.jenkins.blueocean.rest.model.BlueArtifact;
 import io.jenkins.blueocean.rest.model.BlueArtifactContainer;
 import io.jenkins.blueocean.rest.model.BluePipeline;
+import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.StreamSupport;
 
 public class HTMLArtifactTest extends PipelineBaseTest {
@@ -22,7 +23,7 @@ public class HTMLArtifactTest extends PipelineBaseTest {
         WorkflowJob p = j.createProject(WorkflowJob.class, "project");
 
         URL resource = getClass().getResource("HTMLArtifactTest.jenkinsfile");
-        String jenkinsFile = ResourcesUtils.toString(resource);
+        String jenkinsFile = IOUtils.toString(resource, StandardCharsets.UTF_8);
         p.setDefinition(new CpsFlowDefinition(jenkinsFile, true));
         p.save();
 

@@ -26,6 +26,7 @@ import javax.annotation.CheckForNull;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
+import java.util.Optional;
 
 import static io.jenkins.blueocean.rest.model.KnownCapabilities.*;
 
@@ -134,7 +135,7 @@ public class BranchImpl extends PipelineImpl {
         }
 
         public static Branch getBranch(final Job job) {
-            return Caches.BRANCH_METADATA.get(job.getFullName()).orElse(null);
+            return job == null? null : Caches.BRANCH_METADATA.get(job.getFullName());
         }
     }
 
@@ -186,7 +187,7 @@ public class BranchImpl extends PipelineImpl {
         }
 
         public static PullRequest get(final Job job) {
-            return Caches.PULL_REQUEST_METADATA.get(job.getFullName()).orElse(null);
+            return Caches.PULL_REQUEST_METADATA.get(job.getFullName());
         }
     }
 }

@@ -114,7 +114,7 @@ public class CachesTest {
             project.scheduleBuild2(0).getFuture().get();
 
             Caches.BranchCacheLoader loader = new Caches.BranchCacheLoader(r.jenkins);
-            BranchImpl.Branch branch = loader.load(project.getFullName() + "/master").orElse(null);
+            BranchImpl.Branch branch = loader.load(project.getFullName() + "/master");
 
             // if branch is defined, it'll be sorted by branch
             assertNotNull(branch);
@@ -132,7 +132,7 @@ public class CachesTest {
         when(job.getAction(PrimaryInstanceMetadataAction.class)).thenReturn(instanceMetadataAction);
 
         Caches.BranchCacheLoader loader = new Caches.BranchCacheLoader(jenkins);
-        BranchImpl.Branch branch = loader.load(job.getFullName()).orElse(null);
+        BranchImpl.Branch branch = loader.load(job.getFullName());
 
         assertNotNull(branch);
         assertTrue(branch.isPrimary());
@@ -146,7 +146,7 @@ public class CachesTest {
         when(job.getFullName()).thenReturn("cool-branch");
 
         Caches.BranchCacheLoader loader = new Caches.BranchCacheLoader(jenkins);
-        BranchImpl.Branch branch = loader.load(job.getFullName()).orElse(null);
+        BranchImpl.Branch branch = loader.load(job.getFullName());
 
         assertNotNull(branch);
         assertTrue(branch.isPrimary());
@@ -160,7 +160,7 @@ public class CachesTest {
         when(job.getFullName()).thenReturn("cool-branch");
 
         Caches.BranchCacheLoader loader = new Caches.BranchCacheLoader(jenkins);
-        BranchImpl.Branch branch = loader.load(job.getFullName()).orElse(null);
+        BranchImpl.Branch branch = loader.load(job.getFullName());
 
         assertNotNull(branch);
         assertFalse(branch.isPrimary());
@@ -182,7 +182,7 @@ public class CachesTest {
         when(ExtensionList.lookup(SCMHead.HeadByItem.class)).thenReturn(extensionList);
 
         Caches.PullRequestCacheLoader loader = new Caches.PullRequestCacheLoader(jenkins);
-        BranchImpl.PullRequest pr = loader.load(job.getFullName()).orElse(null);
+        BranchImpl.PullRequest pr = loader.load(job.getFullName());
 
         assertNotNull(pr);
         assertEquals("Hates Cake", pr.getAuthor());
@@ -206,7 +206,7 @@ public class CachesTest {
         when(ExtensionList.lookup(SCMHead.HeadByItem.class)).thenReturn(extensionList);
 
         Caches.PullRequestCacheLoader loader = new Caches.PullRequestCacheLoader(jenkins);
-        BranchImpl.PullRequest pr = loader.load(job.getFullName()).orElse(null);
+        BranchImpl.PullRequest pr = loader.load(job.getFullName());
 
         assertNull(pr);
     }
@@ -224,7 +224,7 @@ public class CachesTest {
         when(ExtensionList.lookup(SCMHead.HeadByItem.class)).thenReturn(extensionList);
 
         Caches.PullRequestCacheLoader loader = new Caches.PullRequestCacheLoader(jenkins);
-        BranchImpl.PullRequest pr = loader.load(job.getFullName()).orElse(null);
+        BranchImpl.PullRequest pr = loader.load(job.getFullName());
 
         assertNotNull(pr);
         assertEquals("Hates Cake", pr.getAuthor());

@@ -53,7 +53,7 @@ public abstract class AbstractRunImpl<T extends Run> extends BlueRun {
     private static final Logger LOGGER = LoggerFactory.getLogger( AbstractRunImpl.class.getName());
 
     private static final long TEST_SUMMARY_CACHE_MAX_SIZE = Long.getLong("TEST_SUMMARY_CACHE_MAX_SIZE", 10000);
-    private static final Cache<String, Optional<BlueTestSummary>> TEST_SUMMARY = Caffeine.newBuilder()
+    private static final Cache<String, BlueTestSummary> TEST_SUMMARY = Caffeine.newBuilder()
         .maximumSize(TEST_SUMMARY_CACHE_MAX_SIZE)
         .expireAfterAccess(1, TimeUnit.DAYS)
         .build();
@@ -242,9 +242,9 @@ public abstract class AbstractRunImpl<T extends Run> extends BlueRun {
                                                       run.getExternalizableId(), //
                                                       Thread.currentThread().getName() );
                                         BlueTestSummary summary = BlueTestResultFactory.resolve(run, parent).summary;
-                                        return summary == null ? Optional.empty() : Optional.of(summary);
+                                        return summary;
                                     }
-            ).orElse(null);
+            );
         } else {
             blueTestSummary =  BlueTestResultFactory.resolve(run, this).summary;
         }

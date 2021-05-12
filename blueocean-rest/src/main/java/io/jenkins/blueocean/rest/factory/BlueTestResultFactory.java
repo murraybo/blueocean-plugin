@@ -4,16 +4,15 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.ExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.Run;
-import io.jenkins.blueocean.commons.IterableUtils;
 import io.jenkins.blueocean.rest.Reachable;
 import io.jenkins.blueocean.rest.hal.Link;
 import io.jenkins.blueocean.rest.model.BlueTestResult;
 import io.jenkins.blueocean.rest.model.BlueTestSummary;
+import org.apache.commons.collections4.IterableUtils;
+
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public abstract class BlueTestResultFactory implements ExtensionPoint {
 
@@ -115,25 +114,25 @@ public abstract class BlueTestResultFactory implements ExtensionPoint {
     }
 
     public static Result resolve(Run<?,?> run, Reachable parent) {
-        Stream<BlueTestResult> results = Stream.empty();
+        Iterable<BlueTestResult> results = new ArrayList<>(0);//Collections.emptyList();
         BlueTestSummary summary = new BlueTestSummary(0, 0, 0, 0, 0, 0, 0, //
                                                       parent == null ? null : parent.getLink());
         for (BlueTestResultFactory factory : allFactories()) {
             Result result = factory.getBlueTestResults(run, parent);
             if (result != null && result.results != null && result.summary != null) {
-                results = Stream.concat( StreamSupport.stream(result.results.spliterator(), false), results);
+                results = IterableUtils.chainedIterable(result.results, results);
                 summary = summary.tally(result.summary);
             }
         }
         return getResult(results, summary);
     }
 
-    private static Result getResult(Stream<BlueTestResult> results, BlueTestSummary summary) {
+    private static Result getResult(Iterable<BlueTestResult> results, BlueTestSummary summary) {
         if (summary.getTotal() == 0) {
             summary = null;
             results = null;
         }
-        return Result.of( IterableUtils.getIterable(results), summary);
+        return Result.of(results, summary);
     }
 
     private static Iterable<BlueTestResultFactory> allFactories() {

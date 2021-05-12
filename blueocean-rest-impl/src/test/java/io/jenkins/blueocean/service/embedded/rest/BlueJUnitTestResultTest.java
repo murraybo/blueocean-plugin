@@ -6,6 +6,7 @@ import io.jenkins.blueocean.rest.factory.BlueRunFactory;
 import io.jenkins.blueocean.rest.hal.Link;
 import io.jenkins.blueocean.rest.model.BluePipelineNode;
 import io.jenkins.blueocean.rest.model.BlueRun;
+import org.apache.commons.collections4.IterableUtils;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.junit.Assert;
@@ -16,7 +17,6 @@ import org.jvnet.hudson.test.BuildWatcher;
 import org.jvnet.hudson.test.JenkinsRule;
 
 import java.net.URL;
-import java.util.stream.StreamSupport;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -42,7 +42,7 @@ public class BlueJUnitTestResultTest {
 
         BlueRun test = BlueRunFactory.getRun(r, () -> new Link("test"));
 
-        Assert.assertEquals( 3, StreamSupport.stream(test.getTests().spliterator(), false).count());
+        Assert.assertEquals( 3, IterableUtils.size(test.getTests()));
 
         BluePipelineNode node = mock(BluePipelineNode.class);
         when(node.getId()).thenReturn("6");

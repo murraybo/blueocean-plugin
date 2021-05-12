@@ -236,8 +236,8 @@ public abstract class AbstractRunImpl<T extends Run> extends BlueRun {
     @Override
     public BlueTestSummary getBlueTestSummary() {
         BlueTestSummary blueTestSummary;
-        if (getStateObj() == BlueRunState.FINISHED) {
-            blueTestSummary =  TEST_SUMMARY.get(run.getExternalizableId(), s -> {
+        if (getStateObj() == BlueRunState.FINISHED && run != null) {
+            blueTestSummary = TEST_SUMMARY.get(run.getExternalizableId(), s -> {
                                         LOGGER.debug( "load test summary {} thread {}", //
                                                       run.getExternalizableId(), //
                                                       Thread.currentThread().getName() );
@@ -256,7 +256,7 @@ public abstract class AbstractRunImpl<T extends Run> extends BlueRun {
             return new BlueTestSummary(0,0,0,0,0,0,0,this.getLink());
         }
         Link link = this.getLink().rel("blueTestSummary");
-        blueTestSummary.setLink( link );
+        blueTestSummary.setLink(link);
         return blueTestSummary;
     }
 

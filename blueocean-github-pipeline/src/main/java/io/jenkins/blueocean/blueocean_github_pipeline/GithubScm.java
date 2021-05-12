@@ -59,6 +59,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Vivek Pandey
@@ -261,7 +262,7 @@ public class GithubScm extends AbstractScm {
 
     protected @Nonnull String getCustomApiUri() {
         StaplerRequest request = Stapler.getCurrentRequest();
-        Preconditions.checkNotNull(request, "Must be called in HTTP request context");
+        Objects.requireNonNull(request, "Must be called in HTTP request context");
         String apiUri = request.getParameter("apiUrl");
 
         // if "apiUrl" parameter was supplied, parse and trim trailing slash

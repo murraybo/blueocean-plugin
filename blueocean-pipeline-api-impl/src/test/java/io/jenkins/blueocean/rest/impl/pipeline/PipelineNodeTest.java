@@ -2292,7 +2292,7 @@ public class PipelineNodeTest extends PipelineBaseTest {
         Assert.assertEquals("param2", parameters.get(1).get("name"));
         Assert.assertEquals("StringParameterDefinition", parameters.get(1).get("type"));
         Assert.assertEquals("string param", parameters.get(1).get("description"));
-        Assert.assertNull(Util.fixEmpty((String) ((Map) parameters.get(1).get("defaultParameterValue")).get("value")));
+        Assert.assertNull(Util.fixEmpty(((Map<String,String>) parameters.get(1).get("defaultParameterValue")).get("value")));
 
         resp = post("/organizations/jenkins/pipelines/pipeline1/runs/", ImmutableMap.of("parameters",
                                                                                         ImmutableList.of(ImmutableMap.of("name", "param1", "value", "abc"), ImmutableMap.of("name", "param2", "value", "def"))
